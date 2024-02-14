@@ -1,9 +1,21 @@
-FROM python:3.12
+# Use the official Python image
+FROM python:3.8-slim
 
-Workdir /app
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the application files to the container
+COPY app app
+COPY models models
+COPY app.py app.py
+COPY Dockerfile Dockerfile
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
 
-COPY . .
-EXPOSE $PORT
-CMD gunicorn --bind 0.0.0.0:$PORT app:app
+# Install any dependencies specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Define the command to run your application
+CMD ["python", "app.py"]
